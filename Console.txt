@@ -1,0 +1,29 @@
+> #Question 1
+> library(tidyr)
+> library(ggplot2)
+> ggplot(gather(mtcars), aes(value)) + geom_histogram(bins = 10) + 
++   facet_wrap(~key, scales = 'free_x')
+> 
+> #Question 2
+> y = mtcars$mpg
+> group = mtcars$am
+> y; group
+ [1] 21.0 21.0 22.8 21.4 18.7 18.1 14.3 24.4 22.8 19.2 17.8 16.4 17.3 15.2 10.4
+[16] 10.4 14.7 32.4 30.4 33.9 21.5 15.5 15.2 13.3 19.2 27.3 26.0 30.4 15.8 19.7
+[31] 15.0 21.4
+ [1] 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 1 0 0 0 0 0 1 1 1 1 1 1 1
+> baselineMeans = tapply(mtcars$mpg, mtcars$am, mean)
+> baselineMeansDiff = baselineMeans[2] - baselineMeans[1]
+> tStat = function(w, g) mean(w[g == 1]) - mean(w[g == 0])
+> observedDiff = tStat(y, group)
+> baselineMeansDiff - observedDiff
+1 
+0 
+> permutations = sapply(1:100000, function(i) tStat(y, sample(group)))
+> 
+> #Question 3
+> library(psych)
+> boxplot(mtcars$disp,mtcars$hp,col = "red")
+> boxplot(mtcars$mpg,mtcars$cyl,mtcars$qsec,mtcars$vs,mtcars$am,mtcars$gear,mtcars$carb,col = "blue")
+> boxplot(mtcars$drat,mtcars$wt,col = "green")
+> save.image("C:/Users/aritr/Desktop/Data Analysis/Assignment/Solve/Assignment 7.1/Assignment_7-1.RData")
